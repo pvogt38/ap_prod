@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Part</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script>
+        function includeHTML() {
+            var z, i, elmnt, file, xhttp;
+            z = document.getElementsByTagName("*");
+            for (i = 0; i < z.length; i++) {
+                elmnt = z[i];
+                file = elmnt.getAttribute("w3-include-html");
+                if (file) {
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                            elmnt.removeAttribute("w3-include-html");
+                            includeHTML();
+                        }
+                    }
+                    xhttp.open("GET", file, true);
+                    xhttp.send();
+                    return;
+                }
+            }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString();
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            includeHTML();
+            setInterval(updateDateTime, 1000);
+            updateDateTime(); // Initial call to set the date and time immediately
+        });
+    </script>
+</head>
+<body>
+    <div w3-include-html="banner.html"></div>
+    <div class="container">
+        <h2>Create New Part</h2>
+        <form action="submit_part.php" method="post">
+            <label for="partName">Part Name:</label>
+            <input type="text" id="partName" name="partName" required>
+
+            <label for="partNumber">Part Number:</label>
+            <input type="text" id="partNumber" name="partNumber" required>
+
+            <div class="button-container">
+                <button type="submit">Create Part</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

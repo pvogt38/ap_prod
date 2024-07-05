@@ -1,0 +1,79 @@
+body {
+    background-color: #f0f0f0; /* Light grey background for better contrast */
+    color: #333; /* Dark grey text color for better readability */
+    font-family: Arial, sans-serif; /* Use a clean, readable font */
+}
+
+.container {
+    max-width: 1200px; /* Set a max-width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Add padding to the container */
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%; /* Ensure the table takes up the full width of its container */
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff; /* White background for table */
+}
+
+th, td {
+    border: 1px solid #ccc; /* Light grey border */
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff; /* Blue background for header */
+    color: #fff; /* White text for header */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light grey background for even rows */
+}
+
+.part-name {
+    width: 60%; /* Set width for part name column to 60% */
+}
+
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px; /* Increase padding to make the banner taller */
+    background-color: #007bff; /* Blue background */
+    color: #fff; /* White text color */
+    border: 3px solid #0056b3; /* Add border color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for 3D effect */
+}
+
+.banner img {
+    height: 62.5px; /* Increase the logo height proportionally */
+}
+
+.datetime {
+    text-align: right;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

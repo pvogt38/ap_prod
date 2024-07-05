@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Work Order</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script>
+        function includeHTML() {
+            var z, i, elmnt, file, xhttp;
+            z = document.getElementsByTagName("*");
+            for (i = 0; i < z.length; i++) {
+                elmnt = z[i];
+                file = elmnt.getAttribute("w3-include-html");
+                if (file) {
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                            elmnt.removeAttribute("w3-include-html");
+                            includeHTML();
+                        }
+                    }
+                    xhttp.open("GET", file, true);
+                    xhttp.send();
+                    return;
+                }
+            }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString();
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            includeHTML();
+            setInterval(updateDateTime, 1000);
+            updateDateTime(); // Initial call to set the date and time immediately
+        });
+    </script>
+</head>
+<body>
+    <div w3-include-html="banner.html"></div>
+    <div class="container">
+        <h2>Create Work Order</h2>
+        <form action="generate_work_order.php" method="post">
+            <label for="po_item_id">PO Item ID:</label>
+            <input type="number" id="po_item_id" name="po_item_id" required>
+            <div class="button-container">
+                <button type="submit">Generate Work Order</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

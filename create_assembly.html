@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Assembly</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script>
+        function includeHTML() {
+            var z, i, elmnt, file, xhttp;
+            z = document.getElementsByTagName("*");
+            for (i = 0; i < z.length; i++) {
+                elmnt = z[i];
+                file = elmnt.getAttribute("w3-include-html");
+                if (file) {
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                            elmnt.removeAttribute("w3-include-html");
+                            includeHTML();
+                        }
+                    }
+                    xhttp.open("GET", file, true);
+                    xhttp.send();
+                    return;
+                }
+            }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString();
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            includeHTML();
+            setInterval(updateDateTime, 1000);
+            updateDateTime(); // Initial call to set the date and time immediately
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const partsList = [];
+
+            fetch('fetch_parts.php')
+                .then(response => response.json())
+                .then(data => {
+                    partsList.push(...data);
+                    populateInitialPartOptions(partsList);
+                })
+                .catch(error => console.error('Error fetching parts:', error));
+
+            function createPartOptions(partsList) {
+                if (!Array.isArray(partsList) || partsList.length === 0) {
+                    console.error("Parts list is empty or not an array");
+                    return `<option value="">No parts available</option>`;
+                }
+                return partsList.map(part => `<option value="${part.part_id}">${part.part_name}</option>`).join('');
+            }
+
+            function populateInitialPartOptions(partsList) {
+                const initialSelect = document.getElementById('partId1');
+                initialSelect.innerHTML = createPartOptions(partsList);
+            }
+
+            function addPartRow(partsList) {
+                const container = document.getElementById('partsContainer');
+                const partIndex = container.children.length + 1;
+                const newDiv = document.createElement('div');
+                newDiv.classList.add('item-row');
+                newDiv.innerHTML = `
+                    <label for='partId${partIndex}'>Part ${partIndex}:</label>
+                    <select id='partId${partIndex}' name='partId${partIndex}' required>
+                        ${createPartOptions(partsList)}
+                    </select>
+                    <label for='quantity${partIndex}'>Quantity ${partIndex}:</label>
+                    <input type='number' id='quantity${partIndex}' name='quantity${partIndex}' required>
+                `;
+                container.appendChild(newDiv);
+            }
+
+            document.getElementById('addPart').addEventListener('click', function() {
+                addPartRow(partsList);
+            });
+
+            document.getElementById('removePart').addEventListener('click', function() {
+                const container = document.getElementById('partsContainer');
+                if (container.children.length > 1) {
+                    container.removeChild(container.lastChild);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div w3-include-html="banner.html"></div>
+    <div class="container">
+        <h2>Create New Assembly</h2>
+        <form action="submit_assembly.php" method="post">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required><br><br>
+
+            <h3>Parts</h3>
+            <div id="partsContainer">
+                <!-- Initial part row -->
+                <div class="item-row">
+                    <label for="partId1">Part 1:</label>
+                    <select id="partId1" name="partId1" required>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <label for="quantity1">Quantity 1:</label>
+                    <input type="number" id="quantity1" name="quantity1" required>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" id="addPart">Add Part</button>
+                <button type="button" id="removePart">Remove Part</button>
+            </div>
+            <div class="button-container">
+                <button type="submit">Create Assembly</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
